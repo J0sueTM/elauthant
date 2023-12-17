@@ -51,8 +51,6 @@ make install
 
 If, instead, you configured elauthant to run on a docker container, you can either use my pre-made `docker-compose.yml`, and extend to your liking, or create your own image based on our env.
 
-*docker compose*
-
 ```bash
 docker-compose up -d db
 ```

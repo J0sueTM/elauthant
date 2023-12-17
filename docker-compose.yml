@@ -21,10 +21,10 @@ services:
   pg:
     image: postgres:${PG_VERSION}
     volumes:
-      - ./elauthant.control:${PG_EXT_DIR}/elauthant.control
-      - ./elauthant--${ELAUTHANT_VERSION}.sql:${PG_EXT_DIR}/elauthant.sql
-      - ./elauthant.${ELAUTHANT_GEN}:${PG_EXT_DIR}/elauthant.${ELAUTHANT_GEN}
+      - ${ELAUTHANT_DIR}/elauthant.control:${PG_EXT_DIR}/elauthant.control
+      - ${ELAUTHANT_DIR}/elauthant--${ELAUTHANT_VERSION}.sql:${PG_EXT_DIR}/elauthant--${ELAUTHANT_VERSION}.sql
+      - ${ELAUTHANT_DIR}/elauthant.${ELAUTHANT_GEN}:${PG_EXT_DIR}/elauthant.${ELAUTHANT_GEN}
     environment:
-      POSTGRES_USER=${PG_USER}
-      POSTGRES_PASSWORD=${PG_PASSWORD}
-      POSTGRES_DB=${PG_DB}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}

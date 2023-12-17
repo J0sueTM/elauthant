@@ -21,21 +21,22 @@ ELAUTHANT_VERSION=${ELAUTHANT_VERSION:-0.0.1}
 ELAUTHANT_TARGET="${ELAUTHANT_TARGET:-docker}" # ex: host
 
 PG_VERSION=${PG_VERSION:-15.5}
-PG_EXPECTED_EXT_DIR="/usr/share/postgresql/${PG_VERSION}/extension"
+PG_MAJOR_VERSION="${PG_VERSION%%.*}"
+PG_EXPECTED_EXT_DIR="/usr/share/postgresql/${PG_MAJOR_VERSION}/extension"
 ELAUTHANT_GEN=so
 if [[ "${ELAUTHANT_TARGET}" != "docker" ]]; then
     case "$(uname -s)" in
         Linux*)
             if [[ -f /etc/redhat-release ]]; then
-                PG_EXPECTED_EXT_DIR="/usr/pgsql-${PG_VERSION}/share/extension"
+                PG_EXPECTED_EXT_DIR="/usr/pgsql-${PG_MAJOR_VERSION}/share/extension"
             fi
             ;;
         Darwin*)
-            PG_EXPECTED_EXT_DIR="/usr/local/Cellar/postgresql/${PG_VERSION}/share/postgresql/extension"
+            PG_EXPECTED_EXT_DIR="/usr/local/Cellar/postgresql/${PG_MAJOR_VERSION}/share/postgresql/extension"
             ELAUTHANT_GEN=dylib
             ;;
         CYGWIN*|MINGW32*|MSYS*)
-            PG_EXPECTED_EXT_DIR="/usr/local/Cellar/postgresql/${PG_VERSION}/share/postgresql/extension/"
+            PG_EXPECTED_EXT_DIR="/usr/local/Cellar/postgresql/${PG_MAJOR_VERSION}/share/postgresql/extension/"
             ELAUTHANT_GEN=dll
             ;;
         *)
@@ -48,7 +49,7 @@ if [[ "${ELAUTHANT_TARGET}" != "docker" ]]; then
             ;;
     esac
 fi
-PG_EXT_DIR="${PG_EXT_DIR:-PG_EXPECTED_EXT_DIR}"
+PG_EXT_DIR="${PG_EXT_DIR:-${PG_EXPECTED_EXT_DIR}}"
 PG_USER=${PG_USER:-postgres}
 PG_PASSWORD=${PG_PASSWORD:-postgres}
 PG_DB=${PG_DB:-elauthant_db}
@@ -71,6 +72,7 @@ ELAUTHANT_TARGET=${ELAUTHANT_TARGET}
 ELAUTHANT_GEN=${ELAUTHANT_GEN}
 
 PG_VERSION=${PG_VERSION}
+PG_MAJOR_VERSION=${PG_MAJOR_VERSION}
 PG_EXT_DIR=${PG_EXT_DIR}
 PG_USER=${PG_USER}
 PG_PASSWORD=${PG_PASSWORD}
