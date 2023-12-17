@@ -1,4 +1,4 @@
-# elAUTHant
+# Elauthant
 
 Elauthant stand as a Postgres extension designed to streamline authentication within your database instance without any biases.
 
@@ -8,7 +8,7 @@ In my previous projects, I've grappled with authentication tools like Firebase a
 
 ## How to run
 
-1. Configure
+### Configure
 
 ```bash
 chmod +x configure
@@ -31,15 +31,15 @@ An example configuration:
 PG_USER=my_user PG_PASWORD=123456 ELAUTHENT_VERSION=0.0.01 ./configure
 ```
 
-2. Compile
+### Compile
 
 ```bash
 make all
 ```
 
-2. Deploy
+### Install
 
-**Local**
+#### Host
 
 If you configured elauthant to run on host, all you need to do is install the extension:
 
@@ -47,7 +47,7 @@ If you configured elauthant to run on host, all you need to do is install the ex
 make install
 ```
 
-**Docker**
+#### Docker
 
 If, instead, you configured elauthant to run on a docker container, you can either use my pre-made `docker-compose.yml`, and extend to your liking, or create your own image based on our env.
 
