@@ -15,5 +15,5 @@
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 CREATE OR REPLACE FUNCTION auth_hello_world()
-RETURNS text AS 'elauthant'
+RETURNS text AS '$libdir/elauthant'
 LANGUAGE C STRICT;
