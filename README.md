@@ -6,4 +6,61 @@ Elauthant stand as a Postgres extension designed to streamline authentication wi
 
 In my previous projects, I've grappled with authentication tools like Firebase and Supabase. Despite their assurances, especially Supabase, they ended up complicating the authentication process rather than simplifying it. This frustration led me to create Elauthant. My sole aim is straightforward: authentication within my database, free from unnecessary complications.
 
+## How to run
+
+1. Configure
+
+```bash
+chmod +x configure
+./configure
+```
+
+You can customize how `configure` generates the extension with the following ENVs and a couple of examples:
+
+- **ELAUTHANT_VERSION**: 0.0.1, 1.3.4 (take a look at the tags)
+- **ELAUTHANT_TARGET**: docker or host
+- **ELAUTHENT_EXT_DIR**: `/usr/share/postgresql/15.5/extension`
+- **PG_VERSION**: 15.5, 13.2
+- **PG_USER**: admin
+- **PG_PASSWORD**: my-strong-password
+- **PG_DB**: my_db
+
+An example configuration:
+
+```bash
+PG_USER=my_user PG_PASWORD=123456 ELAUTHENT_VERSION=0.0.01 ./configure
+```
+
+2. Compile
+
+```bash
+make all
+```
+
+2. Deploy
+
+**Local**
+
+If you configured elauthant to run on host, all you need to do is install the extension:
+
+```bash
+make install
+```
+
+**Docker**
+
+If, instead, you configured elauthant to run on a docker container, you can either use my pre-made `docker-compose.yml`, and extend to your liking, or create your own image based on our env.
+
+*docker compose*
+
+```bash
+docker-compose up -d db
+```
+
+In case you want to create your own image, remember to copy the files:
+
+- `elauthant--<your-version>.sql`
+- `elauthant.control`
+- `elauthant.[so|dylib|dll]`
+
 Made with <3 by Josué Teodoro <teodoro.josue@pm.me>
