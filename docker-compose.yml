@@ -1,0 +1,30 @@
+# docker-compose.yml
+# This file is intended to be used for development purposes only.
+# On production, please create your own Dockerfile or docker-compose.yml
+
+# Copyright (C) 2023 Josué Teodoro Moreira <teodoro.josue@pm.me>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+services:
+  pg:
+    image: postgres:${PG_VERSION}
+    volumes:
+      - ./elauthant.control:${PG_EXT_DIR}/elauthant.control
+      - ./elauthant--${ELAUTHANT_VERSION}.sql:${PG_EXT_DIR}/elauthant.sql
+      - ./elauthant.${ELAUTHANT_GEN}:${PG_EXT_DIR}/elauthant.${ELAUTHANT_GEN}
+    environment:
+      POSTGRES_USER=${PG_USER}
+      POSTGRES_PASSWORD=${PG_PASSWORD}
+      POSTGRES_DB=${PG_DB}

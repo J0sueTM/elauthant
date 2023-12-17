@@ -1,0 +1,4 @@
+*.so
+*.o
+.env
+elauthant--*.sql

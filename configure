@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# configure
+# Copyright (C) 2023 Josué Teodoro Moreira <teodoro.josue@pm.me>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+ELAUTHANT_DIR=$(pwd)
+ELAUTHANT_VERSION=${ELAUTHANT_VERSION:-0.0.1}
+ELAUTHANT_TARGET="${ELAUTHANT_TARGET:-docker}" # ex: host
+
+PG_VERSION=${PG_VERSION:-15.5}
+PG_EXPECTED_EXT_DIR="/usr/share/postgresql/${PG_VERSION}/extension"
+ELAUTHANT_GEN=so
+if [[ "${ELAUTHANT_TARGET}" != "docker" ]]; then
+    case "$(uname -s)" in
+        Linux*)
+            if [[ -f /etc/redhat-release ]]; then
+                PG_EXPECTED_EXT_DIR="/usr/pgsql-${PG_VERSION}/share/extension"
+            fi
+            ;;
+        Darwin*)
+            PG_EXPECTED_EXT_DIR="/usr/local/Cellar/postgresql/${PG_VERSION}/share/postgresql/extension"
+            ELAUTHANT_GEN=dylib
+            ;;
+        CYGWIN*|MINGW32*|MSYS*)
+            PG_EXPECTED_EXT_DIR="/usr/local/Cellar/postgresql/${PG_VERSION}/share/postgresql/extension/"
+            ELAUTHANT_GEN=dll
+            ;;
+        *)
+            if [[ -n "${PG_EXT_DIR}" ]]; then
+                echo "failed to identify your system"
+                echo "please rerun and pass the PG_EXT_DIR env"
+
+                exit 1
+            fi
+            ;;
+    esac
+fi
+PG_EXT_DIR="${PG_EXT_DIR:-PG_EXPECTED_EXT_DIR}"
+PG_USER=${PG_USER:-postgres}
+PG_PASSWORD=${PG_PASSWORD:-postgres}
+PG_DB=${PG_DB:-elauthant_db}
+
+# submodules
+if [[ -z "$(ls -A ${ELAUTHANT_DIR}/vendor/postgres)" ]]; then
+    git submodule update -init --recursive --remote
+    cd vendor/postgres
+    git checkout "tags/REL_${PG_VERSION//./_}"
+fi
+
+# sql
+cp elauthant.sql "elauthant--${ELAUTHANT_VERSION}.sql"
+
+# write .env
+echo "
+ELAUTHANT_DIR=${ELAUTHANT_DIR}
+ELAUTHANT_VERSION=${ELAUTHANT_VERSION}
+ELAUTHANT_TARGET=${ELAUTHANT_TARGET}
+ELAUTHANT_GEN=${ELAUTHANT_GEN}
+
+PG_VERSION=${PG_VERSION}
+PG_EXT_DIR=${PG_EXT_DIR}
+PG_USER=${PG_USER}
+PG_PASSWORD=${PG_PASSWORD}
+PG_DB=${PG_DB}
+" > .env
