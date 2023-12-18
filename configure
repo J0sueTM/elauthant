@@ -57,9 +57,11 @@ PG_DB=${PG_DB:-elauthant_db}
 # submodules
 if [[ -z "$(ls -A ${ELAUTHANT_DIR}/vendor/postgres)" ]]; then
     git submodule update -init --recursive --remote
-    cd vendor/postgres
-    git checkout "tags/REL_${PG_VERSION//./_}"
 fi
+
+cd vendor/postgres
+git checkout "tags/REL_${PG_VERSION//./_}"
+cd ../..
 
 # sql
 cp elauthant.sql "elauthant--${ELAUTHANT_VERSION}.sql"
