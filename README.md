@@ -8,6 +8,14 @@ In my previous projects, I've grappled with authentication tools like Firebase a
 
 ## How to run
 
+### Clone
+
+Recursive clone is needed to ensure that entire `vendor/postgres` is completely downloaded:
+
+```bash
+git clone --recursive https://github.com/J0sueTM/elauthant.git
+```
+
 ### Configure
 
 ```bash
@@ -32,6 +40,12 @@ PG_USER=my_user PG_PASWORD=123456 ELAUTHENT_VERSION=0.0.01 ./configure
 ```
 
 ### Compile
+
+If you don't have the `libpq` [previously installed](https://www.postgresql.org/docs/current/libpq.html), please compile PostgreSQL with:
+
+```bash
+cd vendor/postgres && make
+```
 
 ```bash
 make all
