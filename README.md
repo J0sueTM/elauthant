@@ -47,6 +47,8 @@ If you don't have the `libpq` [previously installed](https://www.postgresql.org/
 cd vendor/postgres && make
 ```
 
+Then, compile with:
+
 ```bash
 make all
 ```
